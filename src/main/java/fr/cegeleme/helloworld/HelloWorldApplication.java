@@ -5,7 +5,9 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +24,13 @@ public class HelloWorldApplication {
 
     @Bean
     public Step helloWorldStep(){ //1ere Step
-       return stepBuilderFactory.get("step").tasklet(new HelloWorldTasklet()).build();
+       return stepBuilderFactory.get("step").tasklet(new HelloWorldTasklet(null)).build();
+    }
+
+    @Bean
+    @StepScope // tasklet => StepScope
+    public HelloWorldTasklet helloWorldTasklet(@Value("#{jobParameters['name']}") String name){
+        return new HelloWorldTasklet(name);
     }
     @Bean
     public Job helloWorldJob(){

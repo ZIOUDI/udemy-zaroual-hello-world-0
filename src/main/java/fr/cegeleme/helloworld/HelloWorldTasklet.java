@@ -7,10 +7,17 @@ import org.springframework.batch.repeat.RepeatStatus;
 
 // une tasklet est un bloc de code qui va s'executé dans le cadre d'une transaction d'une Step
 public class HelloWorldTasklet implements Tasklet {
+
+    private final String name;
+
+    public HelloWorldTasklet(final String name){
+        super();
+        this.name = name ;
+    }
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext)
             throws Exception {
-        System.out.println("Hello "+ chunkContext.getStepContext().getJobParameters().get("name"));
+        System.out.println("Hello "+ name);
         return RepeatStatus.FINISHED ;
     }
 }
